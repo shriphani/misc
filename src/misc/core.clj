@@ -14,3 +14,6 @@
    (core-time/interval clueweb12pp-start clueweb12pp-end)
    date))
 
+(defn after-clueweb-time-range?
+  [date]
+  (core-time/after? date clueweb12pp-start))

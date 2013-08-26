@@ -7,26 +7,25 @@
 
 (ns misc.gplus.profile-pages
   (:require [clojure.java.io :as io]
+            [misc.core :as core]
             [misc.dates :as dates]
             [net.cgrand.enlive-html :as html])
   (:import (java.util.zip GZIPInputStream)))
 
 (defn gplus-activity-dates
   [profile-page-src]
-  (map
-   #(-> %
-       html/text
-       dates/dates-in-text)
-   (html/select
-    (html/html-resource (java.io.StringReader. profile-page-src))
-    [:span.Ri])))
+  (flatten
+   (map
+    #(-> %
+        html/text
+        dates/dates-in-text)
+    (html/select
+     (html/html-resource (java.io.StringReader. profile-page-src))
+     [:span.Ri]))))
 
 (defn active-user?
   [profile-page-src]
-  (println (html/select
-            (html/html-resource (java.io.StringReader. profile-page-src))
-            [:span.Ri]))
-  true)
+  (some core/after-clueweb-time-range? (gplus-activity-dates profile-page-src)))
 
 (defn -main
   [& args]
