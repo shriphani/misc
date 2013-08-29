@@ -34,6 +34,8 @@
                        GZIPInputStream.
                        io/reader)]
       (doseq [[i profile-page-src] (map-indexed vector (line-seq rdr))]
-        (when (active-user? profile-page-src)
-          (println (+ 1 i))
-          (flush))))))
+        (if (active-user? profile-page-src)
+          (do (println (+ 1 i))
+              (flush))
+          (do (println "Inactive: " (+ i 1))
+              (flush)))))))
