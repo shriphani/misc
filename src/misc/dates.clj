@@ -2,6 +2,9 @@
 ;;;; Author: spalakod@cs.cmu.edu
 ;;;;
 ;;;; A wrapper around Natty. Dates in natural language text.
+;;;; As of today, this library uses a version of natty not 
+;;;; available in the mvn repo. When 0.8 goes to the repo,
+;;;; project.clj will need to change
 
 (ns misc.dates
   (:require [clj-time.coerce :as coerce-time])
@@ -25,5 +28,7 @@
      (fn [x] (into [] x))
      (map
       (fn [group] (.getDates group))
-      (try (.parse *parser* text)
-           (catch Exception e [])))))))
+      (filter
+       (fn [group] (not (.isTimeInferred group)))
+       (try (.parse *parser* text)
+            (catch Exception e []))))))))
