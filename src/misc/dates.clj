@@ -20,6 +20,8 @@
    (.getTime a-date-obj)))
 
 (defn dates-in-text
+  "Ignore dategroup info and collect all
+the dates seen by Natty"
   [text]
   (map
    convert-to-clj-time-format
@@ -32,3 +34,10 @@
        (fn [group] (not (.isTimeInferred group)))
        (try (.parse *parser* text)
             (catch Exception e []))))))))
+
+(defn dategroups-in-text
+  "Return the raw dategroups seen"
+  [text]
+  (try
+    (.parse *parser* text)
+    (catch Exception e [])))
